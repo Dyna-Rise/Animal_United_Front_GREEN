@@ -119,6 +119,29 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &217825440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2664722113901569180, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
+  m_PrefabInstance: {fileID: 1668434071746729783}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &217825441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217825440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38a6ff728483a34f9929548f3599672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy1contor
+  moveSpeed: 2
+  groundCheckDistance: 0.01
+  wallCheckDistance: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +467,7 @@ GameObject:
   - component: {fileID: 990392689}
   - component: {fileID: 990392688}
   - component: {fileID: 990392687}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +622,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2664722113901569180, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 217825441}
   m_SourcePrefab: {fileID: 100100000, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
 --- !u!1001 &2714554272016458655
 PrefabInstance:
