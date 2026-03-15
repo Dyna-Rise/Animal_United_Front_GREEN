@@ -195,8 +195,8 @@ GameObject:
   - component: {fileID: 590612404085559786}
   - component: {fileID: 8871521149276682970}
   - component: {fileID: 8835750853588140270}
-  - component: {fileID: 8339324330732050764}
   - component: {fileID: 2141925132278364262}
+  - component: {fileID: 4279240699901064981}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player
@@ -218,6 +218,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3190331604453598614}
+  - {fileID: 3151804398724888731}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &3715690079897409694
@@ -339,24 +340,6 @@ MonoBehaviour:
   playerJump: 8
   gravity: 20
   inputDirection: 0
---- !u!114 &8339324330732050764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4382951889173849336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b94a32f8a6675246a111768a4ed8d09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
-  dashSpeedMultiplier: 3
-  dashDuration: 0.4
-  dashCooldown: 0.5
-  afterimagePrefab: {fileID: 9143266182796193799, guid: c98b8a1486b01d445ab6c93fcd5320af, type: 3}
-  afterimageSpawnInterval: 0.05
-  afterimageOffset: {x: 0, y: 0, z: 0.1}
 --- !u!114 &2141925132278364262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,3 +354,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   knockbackForce: 8
   knockbackDuration: 0.2
+--- !u!114 &4279240699901064981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382951889173849336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9a33c40d5a40f44aaf8664b3ed917c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  shotPrefabs: {fileID: 6830772006311767019, guid: d57c3f4645d4aaa46b2925debda2cf5f, type: 3}
+  gate: {fileID: 8469988795631425574}
+  interval: 1
+  shotSpeed: 4
+--- !u!1 &8469988795631425574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3151804398724888731}
+  m_Layer: 0
+  m_Name: Gate
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3151804398724888731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469988795631425574}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.24, y: 0.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4646018522770149937}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
