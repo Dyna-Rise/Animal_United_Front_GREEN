@@ -1,75 +1,113 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class EnemyController : MonoBehaviour
 {
     public float speed = 3.0f;          // 移動速度
-    public bool isToRight = false;      // true=右向き　false=左向き
-    public float revTime = 0;           // 反転時間
-    public LayerMask groundLayer;       // 地面レイヤー
-    bool onGround = false;              // 地面フラグ
-    float time = 0;
+    public bool isToRight = false;      // true=右向き false=左向き
+    public LayerMask Ground;       // 地面レイヤー
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Transform groundCheck;       // 自分の足元
+    public Transform cliffCheck;        // 前方の足元
+    public float groundCheckRadius = 0.15f;
+    public float cliffCheckDistance = 0.5f;
+
+    bool onGround = false;
+    bool groundAhead = true;
+
+    Rigidbody rbody;
+
     void Start()
     {
-        if (isToRight)
-        {
-            transform.localScale = new Vector3(-1, 1, 0);// 向きの変更
-        }
+        rbody = GetComponent<Rigidbody>();
+        UpdateFacing();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // 地上判定
-        onGround = Physics.improvedPatchFriction && Physics.CheckSphere(transform.position, 0.1f, groundLayer);
-        if (revTime > 0)
+        // 足元に地面があるか
+        if (groundCheck != null)
         {
-            time += Time.deltaTime;
-            if (time >= revTime)
-            {
-                isToRight = !isToRight;     //フラグを反転させる
-                time = 0;                   //タイマーを初期化
-                if (isToRight)
-                {
-                    transform.localScale = new Vector3(-1, 1, 0);  // 向きの変更
-                }
-                else
-                {
-                    transform.localScale = new Vector3(1, 1, 0);   // 向きの変更
-                }
-            }
+            onGround = Physics.CheckSphere(
+                groundCheck.position,
+                0.3f,
+                Ground
+            );
+        }
+
+        // 前方足元に地面があるか（崖チェック）
+        if (cliffCheck != null)
+        {
+            groundAhead = Physics.Raycast(
+                cliffCheck.position,
+                Vector3.down,
+                cliffCheckDistance,
+                Ground
+            );
+        }
+
+        // 地面の上にいて、前方足元に地面がなければ反転
+        if (onGround && !groundAhead)
+        {
+            Flip();
         }
     }
 
     void FixedUpdate()
     {
-        if (onGround)
+        if (!onGround) return;
+
+        float dir = isToRight ? 1f : -1f;
+
+        rbody.linearVelocity = new Vector3(
+            dir * speed,
+            rbody.linearVelocity.y,
+            rbody.linearVelocity.z
+        );
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 壁用Triggerに触れたときだけ反転
+        if (other.CompareTag("Wall"))
         {
-            Rigidbody rbody = GetComponent<Rigidbody>();
-            if (isToRight)
-            {
-                rbody.linearVelocity = new Vector3(speed, rbody.linearVelocity.y);
-            }
-            else
-            {
-                rbody.linearVelocity = new Vector3(-speed, rbody.linearVelocity.y);
-            }
+            Flip();
         }
     }
 
-    
-    private void OnTriggerEnter(Collider collision)
+    void Flip()
     {
-        isToRight = !isToRight;     
-        time = 0;                   
+        isToRight = !isToRight;
+        UpdateFacing();
+    }
+
+    void UpdateFacing()
+    {
         if (isToRight)
         {
-            transform.localScale = new Vector3(-1, 1, 0); 
+            transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 0); 
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+
+        if (cliffCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(
+                cliffCheck.position,
+                cliffCheck.position + Vector3.down * cliffCheckDistance
+            );
         }
     }
 }
