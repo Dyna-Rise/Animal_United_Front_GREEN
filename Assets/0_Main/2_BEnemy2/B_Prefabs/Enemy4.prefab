@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 388643428777725931}
   - component: {fileID: 1130299943057589278}
+  - component: {fileID: 1493665401816286224}
   m_Layer: 0
   m_Name: Enemy4
   m_TagString: Untagged
@@ -56,6 +57,24 @@ CapsuleCollider:
   m_Height: 1.99
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1493665401816286224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681700388781682804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d1adf55ea49ba74c8dfb282a1fbcf6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  EnemyGuard: {fileID: 2429707371381502013, guid: c3550d044bd09e74d81251b515544601, type: 3}
+  EnemyShot: {fileID: 5633338145120647573, guid: 17829fb0f0082e745abbc329c299c6e5, type: 3}
+  shotPoint: {fileID: 0}
+  shieldTime: 3
+  shootTime: 3
+  shotInterval: 0.7
 --- !u!1 &7186237484635719201
 GameObject:
   m_ObjectHideFlags: 0
