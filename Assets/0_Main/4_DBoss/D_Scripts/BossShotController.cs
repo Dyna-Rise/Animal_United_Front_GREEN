@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class BossShotController : MonoBehaviour
 {
-
     public GameObject defaultShotPrefub;   // 生成するショットの元データ
     public GameObject gate;
     public readonly int defaultShotNum = 3;   // 弾数指定がないときに放つ弾の数
@@ -50,7 +49,7 @@ public class BossShotController : MonoBehaviour
                 gate.transform.position,
                 Quaternion.identity
                 );
-            shots[i].GetComponent<BossSlashManager>().SetBoss(gameObject.GetComponent<BossController>());
+            shots[i].GetComponent<BossShotManager>().SetBoss(gameObject.GetComponent<BossController>());
         }
 
         // 弾の発射
@@ -85,5 +84,5 @@ public class BossShotController : MonoBehaviour
 
     // memo
     // 上記はAddForceで直接飛ぶ方向を指定しているが、生成時に角度を指定→Vector3.forwardのように決まった方向に飛ばすのもあり？
-    // その場合は弾自体にスクリプトが必要そう。
+
 }

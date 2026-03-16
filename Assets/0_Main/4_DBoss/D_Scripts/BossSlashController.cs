@@ -6,7 +6,7 @@ public class BossSlashController : MonoBehaviour
     public GameObject slashPrefub;
     public GameObject gate;
     public float AttackTime = 1.0f;
-    
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,7 +18,7 @@ public class BossSlashController : MonoBehaviour
     void Update()
     {
 
-    }           
+    }
 
     public void Slash(Transform target)
     {
@@ -33,6 +33,7 @@ public class BossSlashController : MonoBehaviour
             Quaternion.identity,
             gate.transform
         );
+        slash.GetComponent<BossSlashManager>().SetBoss(gameObject.GetComponent<BossController>());
         slash.SetActive(true);
 
     }

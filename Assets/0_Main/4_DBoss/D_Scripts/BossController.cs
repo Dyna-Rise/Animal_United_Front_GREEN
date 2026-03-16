@@ -1,6 +1,6 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
 
 public class BossController : MonoBehaviour
 {
@@ -12,9 +12,6 @@ public class BossController : MonoBehaviour
         Left,
         Right
     }
-
-    public BossSlashController slashController;
-    public BossShotController shotController;
 
     private int hp;
     public int HP
@@ -35,27 +32,27 @@ public class BossController : MonoBehaviour
 
     public int defaultHP = 20;
     public int defaultAttackPower = 1;
-    public float attackRange = 2.5f;
+    public float attackRange = 3.0f;
 
     public float damegeInterval = 3.0f;
 
-
     public int laneNum = 7;
+
+    private BossSlashController slashController;
+    private BossShotController shotController;
+
+    private Vector3 bossSize;   // 位置調整のために使用するので、BOSSのサイズを取得する
 
     private bool onMove = false;
     private bool onDisplay = false;
     private bool onAttack = false;
     private bool onDamage = false;
 
-    private Vector3 bossSize;   // 位置調整のために使用するので、BOSSのサイズを取得しておく
-
     private float laneWidth;
     private float radexTime = 0.1f; // 移動は0.1秒ごとに処理する
-    private float onDamageTime = 0;
+    private float damageTime = 0;
 
-
-    // この下は仮で作成、後で消す
-    float cntTime;
+    private float cntTime;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -63,21 +60,26 @@ public class BossController : MonoBehaviour
         hp = defaultHP;
         bossSize = body.GetComponent<Renderer>().bounds.size;
 
-        
-        float stageWidth = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0)).y + Camera.main.ViewportToWorldPoint(new Vector3(-1, 0, 0)).y;
+        slashController = GetComponent<BossSlashController>();
+        shotController = GetComponent<BossShotController>();
+
+        Vector3 localViewPos = Camera.main.WorldToViewportPoint(transform.position);
+        float stageWidth = Mathf.Abs(Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, localViewPos.z)).x) + Mathf.Abs(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, localViewPos.z)).x);
         laneWidth = stageWidth / (laneNum + 2); // レーン数でそのまま除算すると端になってしまうため、２を加算してから除算計算する
+
+        MoveRaise(3);
     }
 
     // Update is called once per frame
     void Update()
     {
         // ダメージ中か判定して処理する
-        if (onDamageTime >= 0)
+        if (damageTime >= 0)
         {
-            onDamageTime -= Time.deltaTime;
-            if (onDamageTime < 0)
+            damageTime -= Time.deltaTime;
+            if (damageTime < 0)
             {
-                onDamageTime = 0;
+                damageTime = 0;
                 onDamage = false;
             }
         }
@@ -92,16 +94,15 @@ public class BossController : MonoBehaviour
             {
                 if (!(onAttack))
                 {
-                    if (Random.Range(0, 100) % 2 == 0)
+                    if (Random.Range(0, 100) >= 30)
                     {
                         onMove = true;
-                        Debug.Log("raige");
-                        StartCoroutine(MoveRaise(3));
+                        StartCoroutine(MoveRaise(6));
                     }
                     else
                     {
                         onAttack = true;
-                        Debug.Log("attack");
+
                         Attack();
                     }
                 }
@@ -109,15 +110,20 @@ public class BossController : MonoBehaviour
             else
             {
                 onMove = true;
-                Debug.Log("drop");
+
+
+                transform.rotation = ChangeDirection(player.transform);
+
                 transform.position = new Vector3(
-                                            (Random.Range(0, laneNum) * laneWidth) + laneWidth,
+                                            (Random.Range(1, laneNum) * laneWidth),
                                             topLineY + bossSize.y,
                                             transform.position.z);
+
                 Vector3 endPos = new Vector3(
                     transform.position.x,
-                    3,
+                    Random.Range(1, 6),
                     transform.position.z);
+
                 StartCoroutine(MoveDrop(transform.position, endPos, 3));
             }
         }
@@ -129,13 +135,13 @@ public class BossController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerAttack"))
         {
-            if(!(onDamage))
+            if (!(onDamage))
             {
                 onDamage = true;
 
                 hp -= 1;
 
-                onDamageTime = damegeInterval;
+                damageTime = damegeInterval;
             }
         }
     }
@@ -148,13 +154,14 @@ public class BossController : MonoBehaviour
 
     private void Attack()
     {
-        if (Vector2.Distance(transform.position,player.transform.position) >= attackRange)
+        transform.rotation = ChangeDirection(player.transform);
+        if (Vector2.Distance(transform.position, player.transform.position) >= attackRange)
         {
-            shotController.ShotTrident(player.transform);
+            GetComponent<BossShotController>().ShotTrident(player.transform);
         }
         else
         {
-            slashController.Slash(player.transform);
+            GetComponent<BossSlashController>().Slash(player.transform);
         }
     }
 
@@ -208,9 +215,28 @@ public class BossController : MonoBehaviour
         return directionPos;
     }
 
+    private Quaternion ChangeDirection(Transform target)
+    {
+        Quaternion directRotation = Quaternion.identity;
+        if (transform.position.x > player.transform.position.x)
+        {
+            // playerが右側にいるので右向き
+            return Quaternion.Euler(transform.rotation.x, -90, transform.rotation.z);
+        }
+        else if (transform.position.x < player.transform.position.x)
+        {
+            // playerが左側にいるので左向き
+            return Quaternion.Euler(transform.rotation.x, 90, transform.rotation.z);
+        }
+        else
+        {
+            return transform.rotation;
+        }
+    }
+
     IEnumerator MoveRaise(float completeTime)
     {
-        Debug.Log("MoveRaise");
+        // Debug.Log("MoveRaise");
 
         onMove = true;
 
@@ -233,7 +259,7 @@ public class BossController : MonoBehaviour
     // 下に出てくる動き
     IEnumerator MoveDrop(Vector3 startPos, Vector3 endPos, float completeTime)
     {
-        Debug.Log("move arrival");
+        // Debug.Log("move arrival");
         onMove = true;
 
         yield return StartCoroutine(FirstDrop(startPos));
@@ -246,14 +272,14 @@ public class BossController : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
             transform.position = Vector3.Lerp(startPos, endPos, i);
         }
-        
+
         onMove = false;
         onDisplay = true;
     }
 
     IEnumerator FirstDrop(Vector3 pos)
     {
-        Debug.Log("Firstdrop");
+        // Debug.Log("Firstdrop");
         Vector3 endPos = GetEndPos(pos, directionName.Top);
 
         for (float i = 0; i <= 1; i += radexTime)
@@ -276,9 +302,26 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
     }
 
+    // デバッグ用
+    void OnGUI()
+    {
+        Vector3 localViewPos = Camera.main.WorldToViewportPoint(transform.position);
+        float widthRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, localViewPos.z)).x;
+        float widhtLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, localViewPos.z)).x;
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        GUI.Label(new Rect(50, 50, 200, 200),
+                    "プレイヤーとの距離 " + Vector2.Distance(transform.position, player.transform.position).ToString(),
+                    style);
+        GUI.Label(new Rect(50, 150, 200, 200),
+         "画面右端 " + widthRight.ToString() + "; 画面左端 " + widhtLeft.ToString(),
+          style);
+        GUI.Label(new Rect(50, 250, 200, 200), "BOSSの横位置 " + transform.position.x.ToString(), style);
+    }
 
     private void OnDrawGizmos()
     {
+        Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawCube(new Vector3(0, topLineY, 0), new Vector3(30, 0.1f, 3));
 

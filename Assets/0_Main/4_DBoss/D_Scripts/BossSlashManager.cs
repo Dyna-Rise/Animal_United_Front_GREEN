@@ -9,17 +9,14 @@ public class BossSlashManager : MonoBehaviour
         get { return attackPower; }
         set { attackPower = value; }
     }
-    
+
     private BossController boss;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("instantate Slash");
-
         // 生成されたタイミングで、攻撃終了のメソッドを呼び出す
         Invoke("EndSlash", 1.0f);
-
     }
 
     // Update is called once per frame
@@ -31,7 +28,7 @@ public class BossSlashManager : MonoBehaviour
     private void EndSlash()
     {
         Debug.Log("EndSlash");
-
+        Debug.Log("slash boss " + (boss == null));
         // 自身を破棄する前に、Bossに終了することを通知する
         boss.EndAttack();
         Destroy(gameObject);    // 自身を破棄する
