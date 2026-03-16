@@ -81,9 +81,10 @@ public class Enemy4Controller : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // プレイヤーの攻撃に当たったら
         if (other.CompareTag("PlayerAttack"))
         {
-            hp--;
+            hp--;　//体力減少
 
             Destroy(other.gameObject);
 

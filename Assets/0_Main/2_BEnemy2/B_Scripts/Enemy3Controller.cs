@@ -30,7 +30,7 @@ public class EnemyDive : MonoBehaviour
         if (!changedDirection)
         {
             // プレイヤーとの距離を計算
-            float distance = Vector2.Distance(transform.position, player.position);
+            float distance = Vector3.Distance(transform.position, player.position);
             // プレイヤーが一定距離以内に入ったら
             if (distance < detectDistance)
             {
@@ -51,7 +51,7 @@ public class EnemyDive : MonoBehaviour
         // プレイヤーの攻撃に当たったら
         if (other.CompareTag("PlayerAttack"))
         {
-            hp--;
+            hp--; //体力減少
 
             Destroy(other.gameObject);
 
