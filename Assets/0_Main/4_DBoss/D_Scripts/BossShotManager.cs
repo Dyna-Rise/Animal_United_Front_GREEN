@@ -49,7 +49,7 @@ public class BossShotManager : MonoBehaviour
 
     IEnumerator EndShot(float erase,float delay)
     {
-        Debug.Log("EndSlash");
+        Debug.Log("EndShot");
 
         float diffErase = erase - delay;
 

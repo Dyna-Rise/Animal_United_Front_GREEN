@@ -4,11 +4,12 @@ using UnityEngine;
 public class BossShotController : MonoBehaviour
 {
 
+    public GameObject defaultShotPrefub;   // 生成するショットの元データ
+    public GameObject gate;
     public readonly int defaultShotNum = 3;   // 弾数指定がないときに放つ弾の数
     public readonly float defaultShotSpeed = 1.0f;  // 生成したショットの弾速
     public readonly float defaultDelayTime = 0; // 弾ごとの生成ディレイ時間（デフォルト０、値が大きくなると１発ごとにディレイが発生する）
 
-    public GameObject defaultShotPrefub;   // 生成するショットの元データ
     public int maxAngle = 150;      // 発射する際の最大角度
 
     void Start()
@@ -46,9 +47,10 @@ public class BossShotController : MonoBehaviour
         {
             shots[i] = Instantiate(
                 shotPrefub,
-                transform.position,
+                gate.transform.position,
                 Quaternion.identity
                 );
+            shots[i].GetComponent<BossSlashManager>().SetBoss(gameObject.GetComponent<BossController>());
         }
 
         // 弾の発射

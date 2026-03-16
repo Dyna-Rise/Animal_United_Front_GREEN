@@ -18,7 +18,7 @@ public class BossSlashManager : MonoBehaviour
         Debug.Log("instantate Slash");
 
         // 生成されたタイミングで、攻撃終了のメソッドを呼び出す
-        Invoke("EndSlash", 15.0f);
+        Invoke("EndSlash", 1.0f);
 
     }
 
