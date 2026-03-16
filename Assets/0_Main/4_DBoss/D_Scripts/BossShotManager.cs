@@ -7,13 +7,13 @@ public class BossShotManager : MonoBehaviour
     public float delayTime = 3.0f;  // 弾が消える時間とは別に、攻撃の間隔を設定
 
     [SerializeField]
-    private int attackPower=1;
+    private int attackPower = 1;
     private int AttackPower
     {
         get { return attackPower; }
         set { attackPower = value; }
     }
-    
+
     public GameObject hitEffect;
 
     private BossController boss;
@@ -22,13 +22,7 @@ public class BossShotManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(EndShot(eraseTime,delayTime));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        StartCoroutine(EndShot(eraseTime, delayTime));
     }
 
     // Bossの行動でSlashを生成したとき、ボスの情報を設定する用のメソッド
@@ -47,7 +41,7 @@ public class BossShotManager : MonoBehaviour
     //     }
     // }
 
-    IEnumerator EndShot(float erase,float delay)
+    IEnumerator EndShot(float erase, float delay)
     {
         Debug.Log("EndShot");
 

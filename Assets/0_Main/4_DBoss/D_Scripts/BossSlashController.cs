@@ -2,28 +2,16 @@ using UnityEngine;
 
 public class BossSlashController : MonoBehaviour
 {
+    private const float defaultAttackInterval = 1.0f;
+    private const int defaultAttackPower = 1;
 
     public GameObject slashPrefub;
     public GameObject gate;
-    public float AttackTime = 1.0f;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Slash(int attackPower = defaultAttackPower, float attackinterval = defaultAttackInterval)
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void Slash(Transform target)
-    {
-
-        Debug.Log("slash");
+        Debug.Log("Slash");
 
         // Slash のプレハブからオブジェクトを生成。位置は攻撃起点の gate にする。
         // 位置はBOSSに併せたいので、gate を親に設定する。
@@ -33,7 +21,7 @@ public class BossSlashController : MonoBehaviour
             Quaternion.identity,
             gate.transform
         );
-        slash.GetComponent<BossSlashManager>().SetBoss(gameObject.GetComponent<BossController>());
+        slash.GetComponent<BossSlashManager>().SetInitialize(GetComponent<BossController>());
         slash.SetActive(true);
 
     }

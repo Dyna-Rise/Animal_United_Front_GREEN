@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4917599867559172958}
   - component: {fileID: 5113796256259507960}
+  - component: {fileID: 8877014398765852670}
+  - component: {fileID: 9090226295320266587}
+  - component: {fileID: 4348206444518319706}
+  - component: {fileID: 9132741283631350620}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -31,6 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 668595440562644500}
+  - {fileID: 9213188986047238293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &5113796256259507960
@@ -54,6 +59,119 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.75
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8877014398765852670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025127584785177476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2026d45b35b60345b430ab4965ee14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossController
+  player: {fileID: 0}
+  body: {fileID: 7928121638000556970}
+  slashPrefub: {fileID: 4234957863503650788, guid: f53c97cebac1ba249bc21e73e293cdd0, type: 3}
+  shotPrefub: {fileID: 1595551310247498842, guid: 1eddc5f20ccbfe34283382bbab032c35, type: 3}
+  gate: {fileID: 9213188986047238293}
+  topLineY: 8
+  defaultHP: 20
+  defaultAttackPower: 1
+  attackRange: 20
+  damegeInterval: 3
+  actionInterval: 5
+  flashingSpeed: 5
+  laneNum: 7
+  maxConsecutive: 5
+--- !u!114 &9090226295320266587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025127584785177476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9572d7f45a6de84e95912f562cf6afd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossShotController
+  defaultShotPrefub: {fileID: 1595551310247498842, guid: 1eddc5f20ccbfe34283382bbab032c35, type: 3}
+  gate: {fileID: 7441436766025094923}
+  maxAngle: 150
+--- !u!114 &4348206444518319706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025127584785177476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21da625149842b048bba3acc5957e790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSlashController
+  slashPrefub: {fileID: 4234957863503650788, guid: f53c97cebac1ba249bc21e73e293cdd0, type: 3}
+  gate: {fileID: 7441436766025094923}
+--- !u!54 &9132741283631350620
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5025127584785177476}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1 &7441436766025094923
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9213188986047238293}
+  m_Layer: 0
+  m_Name: Gate
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9213188986047238293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441436766025094923}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.4, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4917599867559172958}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7928121638000556970
 GameObject:
   m_ObjectHideFlags: 0
