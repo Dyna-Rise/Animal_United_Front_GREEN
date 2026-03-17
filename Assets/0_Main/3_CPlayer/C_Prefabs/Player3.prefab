@@ -192,6 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   knockbackForce: 8
   knockbackDuration: 0.2
+  invincibilityTime: 1.5
+  targetBody: {fileID: 0}
 --- !u!114 &243335210317785564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,6 +444,10 @@ PrefabInstance:
     - target: {fileID: 9178536763576770415, guid: 6d70828d4796d504182e8a9841186df9, type: 3}
       propertyPath: m_Name
       value: PlayerGurad
+      objectReference: {fileID: 0}
+    - target: {fileID: 9178536763576770415, guid: 6d70828d4796d504182e8a9841186df9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

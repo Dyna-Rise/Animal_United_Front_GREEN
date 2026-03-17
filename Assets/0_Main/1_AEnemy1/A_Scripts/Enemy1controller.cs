@@ -1,113 +1,99 @@
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class EnemyController : MonoBehaviour
+public class Enemy1Controller : MonoBehaviour
 {
-    public float speed = 3.0f;          // 移動速度
-    public bool isToRight = false;      // true=右向き false=左向き
-    public LayerMask Ground;       // 地面レイヤー
-
-    public Transform groundCheck;       // 自分の足元
-    public Transform cliffCheck;        // 前方の足元
-    public float groundCheckRadius = 0.15f;
-    public float cliffCheckDistance = 0.5f;
-
-    bool onGround = false;
-    bool groundAhead = true;
-
+    //コンポーネント
     Rigidbody rbody;
+
+    [Header("体力・スピード")]
+    public int life = 3;
+    public float speed = 1.0f;
+
+    [Header("ダメージ時間・ダメージ移動量")]
+    public float stunTime = 0.2f;
+    public float damageSpeed = 0.5f;
+
+    float damageTimer; //ダメージ時間を測るタイマー
+    bool isDamage; //ダメージフラグ
+
+    [Header("点滅対象")]
+    public GameObject enemyBody;
+
+    int direction = -1; //方向値
 
     void Start()
     {
         rbody = GetComponent<Rigidbody>();
-        UpdateFacing();
     }
 
     void Update()
     {
-        // 足元に地面があるか
-        if (groundCheck != null)
+        //ダメージ中なら減らす
+        if (damageTimer > 0)
         {
-            onGround = Physics.CheckSphere(
-                groundCheck.position,
-                0.3f,
-                Ground
-            );
+            damageTimer -= Time.deltaTime;
+
+            float val = Mathf.Sin(Time.time * 50);
+            if (val > 0) enemyBody.SetActive(true);
+            else enemyBody.SetActive(false);
+
+        }
+        else if(isDamage)
+        {
+            enemyBody.SetActive(true);
+            isDamage = false;
         }
 
-        // 前方足元に地面があるか（崖チェック）
-        if (cliffCheck != null)
+        //方向値の方へ回転
+        if(direction == 1)
         {
-            groundAhead = Physics.Raycast(
-                cliffCheck.position,
-                Vector3.down,
-                cliffCheckDistance,
-                Ground
-            );
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-
-        // 地面の上にいて、前方足元に地面がなければ反転
-        if (onGround && !groundAhead)
+        else
         {
-            Flip();
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 
     void FixedUpdate()
     {
-        if (!onGround) return;
-
-        float dir = isToRight ? 1f : -1f;
-
-        rbody.linearVelocity = new Vector3(
-            dir * speed,
-            rbody.linearVelocity.y,
-            rbody.linearVelocity.z
-        );
+        //ダメージが入っているなら動きが鈍い
+        if(damageTimer > 0) rbody.linearVelocity = new Vector3(direction, 0, 0) * damageSpeed;
+        else rbody.linearVelocity = new Vector3(direction, 0, 0) * speed;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        // 壁用Triggerに触れたときだけ反転
-        if (other.CompareTag("Wall"))
+        if (other.gameObject.tag == "PlayerAttack")
         {
-            Flip();
-        }
-    }
-
-    void Flip()
-    {
-        isToRight = !isToRight;
-        UpdateFacing();
-    }
-
-    void UpdateFacing()
-    {
-        if (isToRight)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-        else
-        {
-            transform.localScale = new Vector3(1, 1, 1);
+            if (damageTimer <= 0 && !isDamage)
+            {
+                life--;
+                if (life <= 0)
+                {
+                    Destroy(gameObject);
+                }
+                damageTimer = stunTime;
+                isDamage = true;
+            }
         }
     }
 
-    private void OnDrawGizmosSelected()
+    //センサーがGroundを抜けた場合
+    void OnTriggerExit(Collider other)    
     {
-        if (groundCheck != null)
+        if (other.gameObject.layer == 6)
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            direction *= -1; //逆転させる
         }
+       
+    }
 
-        if (cliffCheck != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(
-                cliffCheck.position,
-                cliffCheck.position + Vector3.down * cliffCheckDistance
-            );
-        }
+    //何かと衝突したら
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.layer != 6)
+        direction *= -1; //逆転させる
     }
 }

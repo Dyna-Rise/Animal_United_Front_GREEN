@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyShotController : MonoBehaviour
+public class ThrowingController : MonoBehaviour
 {
     public float deleteTime = 10.0f;
 
@@ -8,4 +8,5 @@ public class EnemyShotController : MonoBehaviour
     {
         Destroy(gameObject, deleteTime);
     }
+
 }
