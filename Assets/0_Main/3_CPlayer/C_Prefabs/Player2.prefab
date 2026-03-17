@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 8835750853588140270}
   - component: {fileID: 2141925132278364262}
   - component: {fileID: 4279240699901064981}
+  - component: {fileID: 694577730139107415}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Player
@@ -354,6 +355,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   knockbackForce: 8
   knockbackDuration: 0.2
+  invincibilityTime: 1.5
+  targetBody: {fileID: 2208449179699839602}
 --- !u!114 &4279240699901064981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,6 +373,24 @@ MonoBehaviour:
   gate: {fileID: 8469988795631425574}
   interval: 1
   shotSpeed: 4
+--- !u!114 &694577730139107415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382951889173849336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b94a32f8a6675246a111768a4ed8d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
+  dashSpeedMultiplier: 1
+  dashDuration: 0
+  dashCooldown: 0
+  afterimagePrefab: {fileID: 0}
+  afterimageSpawnInterval: 0.05
+  afterimageOffset: {x: 0, y: 0, z: 0.1}
 --- !u!1 &8469988795631425574
 GameObject:
   m_ObjectHideFlags: 0

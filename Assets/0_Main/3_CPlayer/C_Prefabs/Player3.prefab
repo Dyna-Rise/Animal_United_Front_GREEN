@@ -193,7 +193,7 @@ MonoBehaviour:
   knockbackForce: 8
   knockbackDuration: 0.2
   invincibilityTime: 1.5
-  targetBody: {fileID: 0}
+  targetBody: {fileID: 6835395834942537767}
 --- !u!114 &243335210317785564
 MonoBehaviour:
   m_ObjectHideFlags: 0

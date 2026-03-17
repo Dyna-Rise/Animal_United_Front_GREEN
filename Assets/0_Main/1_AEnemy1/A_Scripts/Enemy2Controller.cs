@@ -37,7 +37,7 @@ public class Enemy2Controller : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("PlayerFollow");
+        player = GameObject.FindGameObjectWithTag("PlayerFollower");
         
     }
 
