@@ -1,6 +1,7 @@
-using System;
 using System.Collections;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class BossController : MonoBehaviour
 {
@@ -19,7 +20,6 @@ public class BossController : MonoBehaviour
         get { return hp; }
     }
 
-
     public GameObject player;
     public GameObject body;
 
@@ -30,6 +30,7 @@ public class BossController : MonoBehaviour
     // BOSSが引っ込むＹ座標
     public float topLineY = 8.0f;
 
+    public Vector3 defaultPosition = new Vector3(8, 4, 0);
     public int defaultHP = 20;
     public int defaultAttackPower = 1;
     public float attackRange = 3.0f;
@@ -62,20 +63,23 @@ public class BossController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("Boss Start");
         hp = defaultHP;
-        bossSize = body.GetComponent<Renderer>().bounds.size;
+        // bossSize = body.GetComponent<Renderer>().bounds.size;
 
         slashController = GetComponent<BossSlashController>();
         shotController = GetComponent<BossShotController>();
 
-        Vector3 localViewPos = Camera.main.WorldToViewportPoint(transform.position);
-        stageWidth = Mathf.Abs(Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, localViewPos.z)).x) + Mathf.Abs(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, localViewPos.z)).x);
+        stageWidth = GetWidthWorldPoint(transform);
+
+        Debug.Log(stageWidth);
+
         laneWidth = stageWidth / (laneNum + 2); // レーン数でそのまま除算すると端になってしまうため、２を加算してから除算計算する
 
         cntTime = 0;
         cntConsencutive = 0;
 
-        transform.position = new Vector3(8, 4, 0);
+        transform.position = defaultPosition;
 
         onMove = true;
         StartCoroutine(MoveRaise(3));
@@ -85,7 +89,11 @@ public class BossController : MonoBehaviour
     void Update()
     {
         // hpが０ならゲームの進行を止める（仮）　ゲームクリアについては差し替えて対応
-        if (hp <= 0) Time.timeScale = 0;
+        if (hp <= 0)
+        {
+            Destroy(gameObject);
+            Time.timeScale = 0;
+        }
 
         // ダメージ中か判定して処理する
         if (damageTime > 0)
@@ -122,7 +130,7 @@ public class BossController : MonoBehaviour
                     if (UnityEngine.Random.Range(0, 100) >= 30 && cntConsencutive < maxConsecutive)
                     {
                         onAttack = true;
-                        maxConsecutive += Attack();
+                        cntConsencutive += Attack();
                     }
                     else
                     {
@@ -135,18 +143,23 @@ public class BossController : MonoBehaviour
             else
             {
                 onMove = true;
-                transform.rotation = ChangeDirection(player.transform);
 
                 transform.position = new Vector3(
-                                            (UnityEngine.Random.Range(1, laneNum) * laneWidth) - (stageWidth / 2) - (bossSize.x / 2),
-                                            topLineY + (bossSize.y / 2),
+                                            (UnityEngine.Random.Range(0, laneNum) * laneWidth) - (laneWidth * (laneNum / 2)),
+                                            topLineY,
                                             transform.position.z);
+
+                // transform.position = new Vector3(
+                //                             (UnityEngine.Random.Range(1, laneNum) * laneWidth) - (stageWidth / 2) - (bossSize.x / 2),
+                //                             topLineY + (bossSize.y / 2),
+                //                             transform.position.z);
 
                 Vector3 endPos = new Vector3(
                     transform.position.x,
-                    UnityEngine.Random.Range(2.5f, 4),
+                    UnityEngine.Random.Range(2.5f, 4.0f),
                     transform.position.z);
 
+                transform.rotation = ChangeDirection(player.transform);
                 StartCoroutine(MoveDrop(transform.position, endPos, 3));
             }
         }
@@ -175,15 +188,14 @@ public class BossController : MonoBehaviour
         if (Vector2.Distance(transform.position, player.transform.position) >= attackRange)
         {
             GetComponent<BossShotController>().ShotTrident(player.transform);
-            actionWait = 5;
         }
         else
         {
             GetComponent<BossSlashController>().Slash();
+            actionWait = 5;
+
+            WaitTime(1.5f); // 攻撃後硬直
         }
-
-        WaitTime(1.5f); // 攻撃後硬直
-
         return actionWait;
     }
 
@@ -191,6 +203,16 @@ public class BossController : MonoBehaviour
     public void EndAttack()
     {
         onAttack = false;
+    }
+
+    // ステージの横幅をWorld座標の数値で取得する
+    private float GetWidthWorldPoint(Transform target)
+    {
+        Vector3 right = GetEndPos(new Vector3(1, 0.5f, target.position.z), directionName.Right);
+        Vector3 left = GetEndPos(new Vector3(0, 0.5f, target.position.z), directionName.Left);
+
+        float width = Mathf.Abs(right.x) + Mathf.Abs(left.x);
+        return width;
     }
 
     // 引数のオブジェクトと取得したい方向から、画面橋の座標を計算するメソッド
@@ -212,13 +234,13 @@ public class BossController : MonoBehaviour
             case directionName.Bottom:
                 viewPos = new Vector3(
                     viewPos.x,
-                    -1,
+                    0,
                     viewPos.z);
                 break;
 
             case directionName.Left:
                 viewPos = new Vector3(
-                    -1,
+                    0,
                     viewPos.x,
                     viewPos.z);
                 break;
@@ -264,8 +286,13 @@ public class BossController : MonoBehaviour
 
         Vector3 endPos = new Vector3(
             transform.position.x,
-            topLineY + (bossSize.y / 2),
+            topLineY,
             transform.position.z);
+
+        // Vector3 endPos = new Vector3(
+        //     transform.position.x,
+        //     topLineY + (bossSize.y / 2),
+        //     transform.position.z);
 
         for (float i = 0; i <= 1; i += radexTime)
         {
@@ -276,7 +303,6 @@ public class BossController : MonoBehaviour
         onMove = false;
         onDisplay = false;
     }
-
 
     // 下に出てくる動き
     IEnumerator MoveDrop(Vector3 startPos, Vector3 endPos, float completeTime)
@@ -334,12 +360,15 @@ public class BossController : MonoBehaviour
         GUI.Label(new Rect(50, 50, 200, 200),
                     "プレイヤーとの距離 " + Vector2.Distance(transform.position, player.transform.position).ToString(),
                     style);
-        GUI.Label(new Rect(50, 100, 200, 200),
+        GUI.Label(new Rect(50, 100, 200, 200), "画面幅 " + stageWidth.ToString(), style);
+        GUI.Label(new Rect(50, 150, 200, 200),
          "画面右端 " + widthRight.ToString() + "; 画面左端 " + widhtLeft.ToString(),
           style);
-        GUI.Label(new Rect(50, 150, 200, 200), "BOSSの横位置 " + transform.position.x.ToString(), style);
+        GUI.Label(new Rect(50, 200, 200, 200), "BOSSの横位置 " + transform.position.x.ToString(), style);
 
-        GUI.Label(new Rect(50, 200, 200, 200), "cntTime " + cntTime.ToString() + "; BOSS hp=" + hp + ";", style);
+        GUI.Label(new Rect(50, 250, 200, 200), "cntTime " + cntTime.ToString() + "; BOSS hp=" + hp + ";", style);
+
+        GUI.Label(new Rect(50, 300, 200, 200), "AttackConsencutive " + cntConsencutive, style);
     }
 
     private void OnDrawGizmos()
@@ -354,9 +383,16 @@ public class BossController : MonoBehaviour
         Gizmos.DrawCube(Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, 10)), new Vector3(0.1f, 11.5f, 3)); // 映っている範囲（右）
         Gizmos.DrawCube(Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, 10)), new Vector3(0.1f, 11.5f, 3)); // 映っている範囲（左）
 
+        float sw = GetWidthWorldPoint(transform);
+        float lw = sw / (laneNum + 2);
+        float def = lw * (int)(laneNum / 2);
+
+        Gizmos.color = new Color(20, 30, 0, 0.2f);
+        for (int i = 1; i <= laneNum; i++)
+        {
+            Gizmos.DrawCube(new Vector3(def, 12, 0), new Vector3(1, 1, 1));
+            def -= lw;
+        }
+        // Laneの表示
     }
-
-
-
-
 }

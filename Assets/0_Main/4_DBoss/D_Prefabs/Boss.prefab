@@ -1085,10 +1085,10 @@ MonoBehaviour:
   slashPrefub: {fileID: 4234957863503650788, guid: f53c97cebac1ba249bc21e73e293cdd0, type: 3}
   shotPrefub: {fileID: 1595551310247498842, guid: 1eddc5f20ccbfe34283382bbab032c35, type: 3}
   gate: {fileID: 9213188986047238293}
-  topLineY: 8
+  topLineY: 11
   defaultHP: 20
   defaultAttackPower: 1
-  attackRange: 20
+  attackRange: 0
   damegeInterval: 3
   actionInterval: 5
   flashingSpeed: 5
@@ -1108,6 +1108,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossShotController
   defaultShotPrefub: {fileID: 1595551310247498842, guid: 1eddc5f20ccbfe34283382bbab032c35, type: 3}
   gate: {fileID: 7441436766025094923}
+  hitEffect: {fileID: 0}
+  boss: {fileID: 8877014398765852670}
+  defaultShotNum: 3
+  defaultShotSpeed: 2.5
+  defaultDelayTime: 0
+  attackDeray: 1
   maxAngle: 150
 --- !u!114 &4348206444518319706
 MonoBehaviour:
@@ -1122,6 +1128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossSlashController
   slashPrefub: {fileID: 4234957863503650788, guid: f53c97cebac1ba249bc21e73e293cdd0, type: 3}
+  hitEffect: {fileID: 0}
   gate: {fileID: 7441436766025094923}
 --- !u!54 &9132741283631350620
 Rigidbody:

@@ -4,7 +4,7 @@ using UnityEngine;
 public class BossShotManager : MonoBehaviour
 {
     public float eraseTime = 10.0f; // 弾が消えるまでの時間を設定
-    public float delayTime = 3.0f;  // 弾が消える時間とは別に、攻撃の間隔を設定
+    // public float delayTime = 3.0f;  // 弾が消える時間とは別に、攻撃の間隔を設定
 
     [SerializeField]
     private int attackPower = 1;
@@ -22,7 +22,7 @@ public class BossShotManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(EndShot(eraseTime, delayTime));
+        StartCoroutine(EndShot(eraseTime));
     }
 
     void OnTriggerEnter(Collider other)
@@ -58,17 +58,17 @@ public class BossShotManager : MonoBehaviour
         hitEffect = hit;
     }
 
-    IEnumerator EndShot(float erase, float delay)
+    IEnumerator EndShot(float erase)
     {
         Debug.Log("EndShot");
 
-        float diffErase = erase - delay;
+        // float diffErase = erase - delay;
 
         // 自身を破棄する前に、Bossに終了することを通知する
-        yield return new WaitForSeconds(delay);
-        boss.EndAttack();
+        // yield return new WaitForSeconds(delay);
+        // boss.EndAttack();
 
-        yield return new WaitForSeconds(diffErase);
+        yield return new WaitForSeconds(erase);
         // 自身を破棄する
         //Instantiate(hitEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
