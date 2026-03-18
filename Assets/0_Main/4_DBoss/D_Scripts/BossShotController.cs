@@ -5,9 +5,11 @@ public class BossShotController : MonoBehaviour
 {
     public GameObject defaultShotPrefub;   // 生成するショットの元データ
     public GameObject gate;
-    public readonly int defaultShotNum = 3;   // 弾数指定がないときに放つ弾の数
-    public readonly float defaultShotSpeed = 1.0f;  // 生成したショットの弾速
-    public readonly float defaultDelayTime = 0; // 弾ごとの生成ディレイ時間（デフォルト０、値が大きくなると１発ごとにディレイが発生する）
+    public GameObject hitEffect;
+    public int defaultShotNum = 3;   // 弾数指定がないときに放つ弾の数
+    public float defaultShotSpeed = 2.5f;  // 生成したショットの弾速
+    public float defaultDelayTime = 0; // 弾ごとの生成ディレイ時間（デフォルト０、値が大きくなると１発ごとにディレイが発生する）
+
 
     public int maxAngle = 150;      // 発射する際の最大角度
 
@@ -16,6 +18,19 @@ public class BossShotController : MonoBehaviour
         // テスト用
         //GameObject player = GameObject.FindGameObjectWithTag("Player");
         //ShotTrident(player.transform);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            GameObject effect = Instantiate(
+                hitEffect,
+                transform.position,
+                Quaternion.identity
+            );
+            Destroy(effect, 1.0f);
+        }
     }
 
     // 相手だけ指定してデフォルトでショットを実行
@@ -50,6 +65,7 @@ public class BossShotController : MonoBehaviour
                 Quaternion.identity
                 );
             shots[i].GetComponent<BossShotManager>().SetBoss(gameObject.GetComponent<BossController>());
+            if (hitEffect != null) shots[i].GetComponent<BossShotManager>().SetHit(hitEffect);
         }
 
         // 弾の発射

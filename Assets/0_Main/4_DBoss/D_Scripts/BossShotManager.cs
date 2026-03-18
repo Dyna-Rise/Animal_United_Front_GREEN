@@ -14,15 +14,36 @@ public class BossShotManager : MonoBehaviour
         set { attackPower = value; }
     }
 
-    public GameObject hitEffect;
+    public GameObject hitEffect = null;
 
     private BossController boss;
-
+    private bool isInitialize = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         StartCoroutine(EndShot(eraseTime, delayTime));
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player") && hitEffect != null)
+        {
+            GameObject effect = Instantiate(
+                hitEffect,
+                 transform.position,
+                 Quaternion.identity
+                );
+
+            Destroy(effect, 1.0f);
+        }
+    }
+
+
+    public void SetInitialize(BossController controller)
+    {
+        isInitialize = true;
+        SetBoss(controller);
     }
 
     // Bossの行動でSlashを生成したとき、ボスの情報を設定する用のメソッド
@@ -32,14 +53,10 @@ public class BossShotManager : MonoBehaviour
     }
 
 
-    // void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.gameObject.CompareTag("Player"))
-    //     {
-    //         Instantiate(hitEffect, transform.position, Quaternion.identity);
-    //         Destroy(gameObject);
-    //     }
-    // }
+    public void SetHit(GameObject hit)
+    {
+        hitEffect = hit;
+    }
 
     IEnumerator EndShot(float erase, float delay)
     {
