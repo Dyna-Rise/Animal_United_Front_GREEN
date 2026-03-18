@@ -172,6 +172,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!95 &217825446
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217825440}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9bbcf96c9a254c5ba654027c656d7b39, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +681,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2664722113901569180, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 217825445}
+    - targetCorrespondingSourceObject: {fileID: 2664722113901569180, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 217825446}
   m_SourcePrefab: {fileID: 100100000, guid: 422419aba0b4d9e42a1edb1b945b278e, type: 3}
 --- !u!1001 &2714554272016458655
 PrefabInstance:
@@ -829,8 +854,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5239600125235970173, guid: 46d220609637ca44aa328312d0afc87d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5132466726480981486}
   m_SourcePrefab: {fileID: 100100000, guid: 46d220609637ca44aa328312d0afc87d, type: 3}
+--- !u!1 &5132466726480981485 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5239600125235970173, guid: 46d220609637ca44aa328312d0afc87d, type: 3}
+  m_PrefabInstance: {fileID: 5132466726480981484}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5132466726480981486
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5132466726480981485}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5339051038812004522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -886,8 +941,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3368461653760202200, guid: 748e064f4cef3c54e89f5c58f16474f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5339051038812004524}
   m_SourcePrefab: {fileID: 100100000, guid: 748e064f4cef3c54e89f5c58f16474f5, type: 3}
+--- !u!1 &5339051038812004523 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3368461653760202200, guid: 748e064f4cef3c54e89f5c58f16474f5, type: 3}
+  m_PrefabInstance: {fileID: 5339051038812004522}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5339051038812004524
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5339051038812004523}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
