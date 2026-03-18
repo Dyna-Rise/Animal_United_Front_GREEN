@@ -89,16 +89,17 @@ public class Enemy4Controller : MonoBehaviour
     IEnumerator GuardCol()
     {
         toGuard = false;
+
         //盾の生成
         GameObject obj = Instantiate(
-             guardPrefab,
-             guardGate.transform.position,
-             Quaternion.identity
-             );
+            guardPrefab,
+            guardGate.transform.position,
+           Quaternion.identity
+        );
 
-        obj.transform.parent = transform; //子オブジェクトにする
 
         yield return new WaitForSeconds(interval);
+
         Destroy(obj.gameObject);
         guardCoroutine = null;
         toShoot = true;
