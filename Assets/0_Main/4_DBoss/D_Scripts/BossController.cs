@@ -349,27 +349,27 @@ public class BossController : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
     }
 
-    // デバッグ用
-    void OnGUI()
-    {
-        Vector3 localViewPos = Camera.main.WorldToViewportPoint(transform.position);
-        float widthRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, localViewPos.z)).x;
-        float widhtLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, localViewPos.z)).x;
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 30;
-        GUI.Label(new Rect(50, 50, 200, 200),
-                    "プレイヤーとの距離 " + Vector2.Distance(transform.position, player.transform.position).ToString(),
-                    style);
-        GUI.Label(new Rect(50, 100, 200, 200), "画面幅 " + stageWidth.ToString(), style);
-        GUI.Label(new Rect(50, 150, 200, 200),
-         "画面右端 " + widthRight.ToString() + "; 画面左端 " + widhtLeft.ToString(),
-          style);
-        GUI.Label(new Rect(50, 200, 200, 200), "BOSSの横位置 " + transform.position.x.ToString(), style);
+    // // デバッグ用
+    // void OnGUI()
+    // {
+    //     Vector3 localViewPos = Camera.main.WorldToViewportPoint(transform.position);
+    //     float widthRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0.5f, localViewPos.z)).x;
+    //     float widhtLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0.5f, localViewPos.z)).x;
+    //     GUIStyle style = new GUIStyle();
+    //     style.fontSize = 30;
+    //     GUI.Label(new Rect(50, 50, 200, 200),
+    //                 "プレイヤーとの距離 " + Vector2.Distance(transform.position, player.transform.position).ToString(),
+    //                 style);
+    //     GUI.Label(new Rect(50, 100, 200, 200), "画面幅 " + stageWidth.ToString(), style);
+    //     GUI.Label(new Rect(50, 150, 200, 200),
+    //      "画面右端 " + widthRight.ToString() + "; 画面左端 " + widhtLeft.ToString(),
+    //       style);
+    //     GUI.Label(new Rect(50, 200, 200, 200), "BOSSの横位置 " + transform.position.x.ToString(), style);
 
-        GUI.Label(new Rect(50, 250, 200, 200), "cntTime " + cntTime.ToString() + "; BOSS hp=" + hp + ";", style);
+    //     GUI.Label(new Rect(50, 250, 200, 200), "cntTime " + cntTime.ToString() + "; BOSS hp=" + hp + ";", style);
 
-        GUI.Label(new Rect(50, 300, 200, 200), "AttackConsencutive " + cntConsencutive, style);
-    }
+    //     GUI.Label(new Rect(50, 300, 200, 200), "AttackConsencutive " + cntConsencutive, style);
+    // }
 
     private void OnDrawGizmos()
     {

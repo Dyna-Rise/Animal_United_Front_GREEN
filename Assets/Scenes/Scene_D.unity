@@ -685,7 +685,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8877014398765852670, guid: 660e9c8719b9acc448a24b76b7db17d2, type: 3}
       propertyPath: defaultHP
-      value: 1
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8877014398765852670, guid: 660e9c8719b9acc448a24b76b7db17d2, type: 3}
       propertyPath: attackRange
