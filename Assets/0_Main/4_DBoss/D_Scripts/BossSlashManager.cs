@@ -1,9 +1,11 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BossSlashManager : MonoBehaviour
 {
     private const int defaultAttackPower = 1;
     private const float defaultAttackInterval = 1.0f;
+    private GameObject hitEffect;
 
     [SerializeField]
     private int attackPower = 1;
@@ -33,6 +35,20 @@ public class BossSlashManager : MonoBehaviour
         Destroy(gameObject);    // 自身を破棄する
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && hitEffect != null)
+        {
+            GameObject effect = Instantiate(
+                hitEffect,
+                transform.position,
+                quaternion.identity
+            );
+
+            Destroy(effect, 1.0f);
+        }
+    }
+
     public void SetInitialize(BossController controller, int attackPower = defaultAttackPower, float attackInterval = defaultAttackInterval)
     {
         isInitialize = true;
@@ -44,6 +60,11 @@ public class BossSlashManager : MonoBehaviour
     public void SetBoss(BossController controller)
     {
         boss = controller;
+    }
+
+    public void SetHit(GameObject hit)
+    {
+        hitEffect = hit;
     }
 
     public void SetAttack(int ackPow, float ackInt)
