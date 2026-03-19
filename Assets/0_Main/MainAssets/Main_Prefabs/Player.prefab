@@ -191,6 +191,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   knockbackForce: 8
   knockbackDuration: 0.2
+  invincibilityTime: 1.5
+  targetBody: {fileID: 3846032230473438242}
 --- !u!114 &4713399163721590617
 MonoBehaviour:
   m_ObjectHideFlags: 0

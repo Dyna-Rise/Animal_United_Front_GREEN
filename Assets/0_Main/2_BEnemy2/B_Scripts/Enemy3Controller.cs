@@ -1,64 +1,120 @@
 using UnityEngine;
 
-public class EnemyDive : MonoBehaviour
+public class Enemy3Controller : MonoBehaviour
 {
-    public float speed = 3f; //移動スピード
-    public float detectDistance = 5f;　//プレイヤーを見つける距離
-    public float searchRange;       // 索敵範囲
-    public float deleteTime = 20.0f;　//何秒後に自動削除するか
+    GameObject player;
 
-    public int hp = 5;　//HP
+    [Header("体力・通常スピード・突進スピード")]
+    public int life = 2;
+    public float speed = 3.0f;
+    public float rushSpeed = 5.0f;
 
-    Transform player;　//プレイヤーのTransformを保存
-    Vector3 moveDirection;　//進む方向
-    bool changedDirection = false;　//方向変更したかどうか（一回だけ変更するため）
+    bool isRush; //突進フラグ
+    float vx, vy; //突進方向値
+
+    [Header("索敵範囲")]
+    public float range = 6.0f;
+
+    [Header("廃棄時間")]
+    public float deleteTime = 6.0f;
+
+    [Header("ダメージ時間・ダメージ移動量")]
+    public float stunTime = 0.2f;
+    public float damageSpeed = 0.5f;
+
+    float damageTimer; //ダメージ時間を測るタイマー
+    bool isDamage; //ダメージフラグ
+
+    [Header("点滅対象")]
+    public GameObject enemyBody;
 
     void Start()
     {
-        // 一定時間後にこのオブジェクトを削除
+        player = GameObject.FindGameObjectWithTag("PlayerFollower");
         Destroy(gameObject, deleteTime);
-        // タグ「Player」のオブジェクトを探してTransformを取得
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-
-        // 最初は左に飛ぶ
-        moveDirection = Vector3.left;
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // プレイヤーを見つけたら1回だけ方向変更
-        if (!changedDirection)
+        //ダメージ中なら減らす
+        if (damageTimer > 0)
         {
-            // プレイヤーとの距離を計算
-            float distance = Vector3.Distance(transform.position, player.position);
-            // プレイヤーが一定距離以内に入ったら
-            if (distance < detectDistance)
-            {
-                // プレイヤーの方向を計算して進行方向にする
-                moveDirection = (player.position - transform.position).normalized;
-                // 1回だけ方向変更するためフラグをON
-                changedDirection = true;
-            }
+            damageTimer -= Time.deltaTime;
+
+            float val = Mathf.Sin(Time.time * 50);
+            if (val > 0) enemyBody.SetActive(true);
+            else enemyBody.SetActive(false);
+
+        }
+        else if (isDamage)
+        {
+            enemyBody.SetActive(true);
+            isDamage = false;
         }
 
-        // 移動
-        transform.Translate(moveDirection * speed * Time.deltaTime);
+        //プレイヤーとの直線距離を取得
+        float dis = Vector2.Distance(player.transform.position, transform.position);
+
+        //範囲内ならPlayerに突進
+        if (dis < range && player != null)
+        {
+            if (!isRush) //最初一回目だけ目標方向を取得
+            {
+                //2者間の差をｘ成分（底辺）、ｙ成分（高さ）に分解
+                float dx = player.transform.position.x - transform.position.x;
+                float dy = player.transform.position.y - transform.position.y;
+
+                //底辺と高さを用いて角度情報を入手（逆タンジェント関数を利用）
+                float rad = Mathf.Atan2(dy, dx);
+
+                //角度情報からあらためて、長辺を1とした時のxとyの比率をそれぞれ入手
+                vx = Mathf.Cos(rad);
+                vy = Mathf.Sin(rad);
+                isRush = true;
+            }
+
+            //突進する
+            if (damageTimer > 0)
+                //ダメージ中なら鈍い
+                GetComponent<Rigidbody>().linearVelocity = (new Vector3(vx, vy, 0).normalized) * rushSpeed * 0.2f;
+            else
+                GetComponent<Rigidbody>().linearVelocity = (new Vector3(vx, vy, 0).normalized) * rushSpeed;
+        }
+        else
+        {
+            //変数speedの方に動く
+            if (damageTimer > 0)
+                //ダメージ中なら鈍い
+                transform.position += new Vector3(speed * 0.1f, 0, 0) * Time.deltaTime;
+            else
+                transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
+
+        }
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    //ダメージ
+    void OnTriggerEnter(Collider other)
     {
-        // プレイヤーの攻撃に当たったら
-        if (other.CompareTag("PlayerAttack"))
+        if (other.gameObject.tag == "PlayerAttack")
         {
-            hp--; //体力減少
-
-            Destroy(other.gameObject);
-
-            if (hp <= 0)
+            if (damageTimer <= 0 && !isDamage)
             {
-                Destroy(gameObject);
+                life--;
+                if (life <= 0)
+                {
+                    Destroy(gameObject);
+                }
+                damageTimer = stunTime;
+                isDamage = true;
             }
         }
+    }
+
+    //対象物を選択したときだけGizumoが出る
+    void OnDrawGizmosSelected()
+    {
+        //円（ワイヤー）を表示 (中心から、変数searchRangeの半径で）
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }

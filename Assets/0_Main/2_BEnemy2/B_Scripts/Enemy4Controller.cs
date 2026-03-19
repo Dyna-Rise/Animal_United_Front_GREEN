@@ -1,97 +1,129 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class Enemy4Controller : MonoBehaviour
 {
-    public GameObject EnemyGuard;   // 盾プレハブ
-    public GameObject EnemyShot;    // 弾プレハブ
-    public Transform shotPoint;     // 弾の発射位置
+    GameObject player;
 
-    public float guardTime = 3f;    // 盾を張る時間
-    public float shootTime = 3f;    // シュート時間
+    [Header("体力")]
+    public int life = 5;
 
-    public int hp = 5;   // エネミーの体力
+    [Header("シュートスピード・インターバル")]
+    public int shootSpeed = 5;
+    public float interval = 3;
 
-    bool guardFlag = true;          // 盾モードのフラグ（最初はON）
-    bool shootFlag = false;　　　　 //シュートモードのフラグ　
+    [Header("生成ショット・生成ガード")]
+    public GameObject shootPrefab;
+    public GameObject gate;
+    public GameObject guardPrefab;
+    public GameObject guardGate;
 
-    Coroutine guardCoroutine = null;　　// 盾コルーチンが動いているか確認
-    Coroutine shootCoroutine = null;　　// シュートコルーチンが動いているか確認
+    //それぞれの切り替えスイッチ
+    bool toGuard, toShoot;
 
-    GameObject currentGuard;　// 現在出ている盾を保存
+    Coroutine shootCoroutine;
+    Coroutine guardCoroutine;
 
+    [Header("ダメージ時間・ダメージ移動量")]
+    public float stunTime = 0.2f;
+    public float damageSpeed = 0.5f;
+
+    float damageTimer; //ダメージ時間を測るタイマー
+    bool isDamage; //ダメージフラグ
+
+    [Header("点滅対象")]
+    public GameObject enemyBody;
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("PlayerFollower");
+        toGuard = true; //最初はガードから
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        // 盾モード開始条件
-        // 盾フラグON かつ 盾コルーチンが動いていない
-        if (guardFlag && guardCoroutine == null)
+        //ダメージ中なら減らす
+        if (damageTimer > 0)
         {
-            guardCoroutine = StartCoroutine(GuardMode());
+            damageTimer -= Time.deltaTime;
+
+            float val = Mathf.Sin(Time.time * 50);
+            if (val > 0) enemyBody.SetActive(true);
+            else enemyBody.SetActive(false);
+
+        }
+        else if (isDamage)
+        {
+            enemyBody.SetActive(true);
+            isDamage = false;
         }
 
-        // シュートモード開始条件
-        // シュートフラグON かつ シュートコルーチンが動いていない
-        if (shootFlag && shootCoroutine == null)
+        if (shootCoroutine == null && toShoot)
         {
-            shootCoroutine = StartCoroutine(ShootMode());
+            shootCoroutine = StartCoroutine(ShootCol());
         }
+        else if (guardCoroutine == null && toGuard)
+        {
+            guardCoroutine = StartCoroutine(GuardCol());
+        }
+
     }
 
-    IEnumerator GuardMode()
+    IEnumerator ShootCol()
     {
-        // 盾モード開始なのでフラグをOFF
-        guardFlag = false;
+        toShoot = false;
+        //弾の生成
+        GameObject obj = Instantiate(
+            shootPrefab,
+            gate.transform.position,
+            Quaternion.identity
+            );
 
-        // 盾プレハブをEnemy4の位置に生成
-        currentGuard = Instantiate(EnemyGuard, transform.position, Quaternion.identity);
+        obj.GetComponent<Rigidbody>().AddForce(new Vector3(-shootSpeed, 0, 0), ForceMode.Impulse);
+        yield return new WaitForSeconds(interval);
+        shootCoroutine = null;
+        toGuard = true;
+    }
 
-        // Enemy4の子オブジェクトにする
-        // → Enemy4が動いても盾が一緒についてくる
-        currentGuard.transform.SetParent(transform);
+    IEnumerator GuardCol()
+    {
+        toGuard = false;
 
-        // 一定時間待つ
-        yield return new WaitForSeconds(guardTime);
+        //盾の生成
+        GameObject obj = Instantiate(
+            guardPrefab,
+            guardGate.transform.position,
+           Quaternion.identity
+        );
 
-        // 盾削除
-        if (currentGuard != null)
-        {
-            Destroy(currentGuard);
-        }
 
-        // シュートへ
-        shootFlag = true;
+        yield return new WaitForSeconds(interval);
+
+        Destroy(obj.gameObject);
         guardCoroutine = null;
+        toShoot = true;
     }
 
-    IEnumerator ShootMode()
-    {
-        // シュートモード開始なのでフラグOFF
-        shootFlag = false;
-
-        // 弾を発射位置から生成
-        Instantiate(EnemyShot, shotPoint.position, Quaternion.identity);
-
-        // シュートモードの時間待つ
-        yield return new WaitForSeconds(shootTime);
-
-        // 次は盾モードへ
-        guardFlag = true;
-        shootCoroutine = null;　 // コルーチン終了
-    }
-
+    //ダメージ
     void OnTriggerEnter(Collider other)
     {
-        // プレイヤーの攻撃に当たったら
-        if (other.CompareTag("PlayerAttack"))
+        if (other.gameObject.tag == "PlayerAttack")
         {
-            hp--;　//体力減少
-
-            Destroy(other.gameObject);
-
-            if (hp <= 0)
+            if (damageTimer <= 0 && !isDamage)
             {
-                Destroy(gameObject);
+                if((guardCoroutine == null) || (guardCoroutine != null && player.transform.position.x > transform.position.x))
+                {
+                    life--;
+                    if (life <= 0)
+                    {
+                        Destroy(gameObject);
+                    }
+                    damageTimer = stunTime;
+                    isDamage = true;
+                }
             }
         }
     }
+
 }

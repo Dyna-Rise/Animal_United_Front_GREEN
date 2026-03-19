@@ -86,7 +86,7 @@ public class SlashAttack : MonoBehaviour
 
         // プレイヤーの最後の向きを取得
         float playerFacingDirectionX = playerMove.LastInputDirection;
-        Debug.Log(playerMove.LastInputDirection);
+        //Debug.Log(playerMove.LastInputDirection);
 
         // 攻撃エフェクトの生成位置を計算
         Vector3 spawnOffset = slashOffsets[stageIndex];
@@ -109,11 +109,11 @@ public class SlashAttack : MonoBehaviour
         //生成したエフェクトの向きを調整
         if (playerFacingDirectionX < 0)
         {
-            slashEffect.transform.localScale = new Vector3(1, 1, 1);
+            slashEffect.transform.localScale = new Vector3(2, 2, 1);
         }
         else if(playerFacingDirectionX < 0)
         {
-            slashEffect.transform.localScale = new Vector3(-1, 1, 1);
+            slashEffect.transform.localScale = new Vector3(-2, 2, 1);
         }
 
         // 生成されたエフェクトは、時間差で破棄
