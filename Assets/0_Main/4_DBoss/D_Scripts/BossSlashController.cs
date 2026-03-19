@@ -6,6 +6,7 @@ public class BossSlashController : MonoBehaviour
     private const int defaultAttackPower = 1;
 
     public GameObject slashPrefub;
+    public GameObject hitEffect;
     public GameObject gate;
 
 
@@ -22,7 +23,7 @@ public class BossSlashController : MonoBehaviour
             gate.transform
         );
         slash.GetComponent<BossSlashManager>().SetInitialize(GetComponent<BossController>());
+        if (hitEffect != null) slash.GetComponent<BossSlashManager>().SetHit(hitEffect);
         slash.SetActive(true);
-
     }
 }
