@@ -1,7 +1,5 @@
 using System.Collections;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class BossController : MonoBehaviour
 {
