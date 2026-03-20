@@ -9775,7 +9775,7 @@ GameObject:
   - component: {fileID: 5815526627941213045}
   - component: {fileID: 6796793609919344963}
   - component: {fileID: 1925670816063848403}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyShot
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -9859,4 +9859,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e392bbd5635d13499ad4e17ff160a9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  deleteTime: 10
+  deleteTime: 5

@@ -92,7 +92,7 @@ public class BossController : MonoBehaviour
         if (hp <= 0)
         {
             Destroy(gameObject);
-            Time.timeScale = 0;
+            GameManager.gameState = GameState.gameclear;
         }
 
         // ダメージ中か判定して処理する
@@ -107,7 +107,7 @@ public class BossController : MonoBehaviour
             }
             else
             {
-                if (Mathf.Sin(Time.time * (flashingSpeed * 2)) > 0)     // flashingSpeedは１秒間で点滅する回数なので、２倍する（点灯消滅で１回ずつ使うため）
+                if (Mathf.Sin(Time.time * 50) > 0)     // flashingSpeedは１秒間で点滅する回数なので、２倍する（点灯消滅で１回ずつ使うため）
                 {
                     body.SetActive(false);
                 }
@@ -156,7 +156,7 @@ public class BossController : MonoBehaviour
 
                 Vector3 endPos = new Vector3(
                     transform.position.x,
-                    UnityEngine.Random.Range(2.5f, 4.0f),
+                    UnityEngine.Random.Range(1, 3.0f),
                     transform.position.z);
 
                 transform.rotation = ChangeDirection(player.transform);

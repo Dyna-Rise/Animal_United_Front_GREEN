@@ -57,8 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8092d7dffe1daf8438bdd43ea4d996b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerChanger
-  player2TimeMax: 15
-  player3TimeMax: 15
+  player2TimeMax: 10
+  player3TimeMax: 10
   defaultPlayer: {fileID: 3368461653760202200, guid: 3238946bb79154d4aa27b82d6ed1934c, type: 3}
   changePlayers:
   - {fileID: 4382951889173849336, guid: 5cbca844380125547b46ab0a0731547f, type: 3}

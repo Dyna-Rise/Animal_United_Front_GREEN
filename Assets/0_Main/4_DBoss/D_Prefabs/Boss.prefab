@@ -1081,11 +1081,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossController
   player: {fileID: 0}
-  body: {fileID: 7928121638000556970}
+  body: {fileID: 665146991730717831}
   slashPrefub: {fileID: 4234957863503650788, guid: f53c97cebac1ba249bc21e73e293cdd0, type: 3}
   shotPrefub: {fileID: 1595551310247498842, guid: 1eddc5f20ccbfe34283382bbab032c35, type: 3}
   gate: {fileID: 9213188986047238293}
   topLineY: 11
+  defaultPosition: {x: 8, y: 4, z: 0}
   defaultHP: 20
   defaultAttackPower: 1
   attackRange: 0
